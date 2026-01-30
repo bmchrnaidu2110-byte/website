@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * PREMIUM DESIGN SYSTEM - Global Styles
+ *
+ * Typography:
+ * - Serif fonts for editorial headlines (premium, authoritative)
+ * - Clean sans-serif for body text (modern, readable)
+ * - Careful letter-spacing and line-height for perfect hierarchy
+ *
+ * Motion:
+ * - Smooth scroll-behavior across all pages
+ * - GPU-accelerated animations for 60fps performance
+ * - Intentional easing (no default ease-in-out)
+ *
+ * Color Palette:
+ * - Black (#000000) for power sections
+ * - White (#FFFFFF) for clarity sections
+ * - Yellow (#FFD400) for intentional accent/emphasis only
+ * - NO gray, NO blue, NO secondary colors
+ *
+ * Spacing:
+ * - Generous whitespace for premium feel
+ * - Consistent padding hierarchy
+ * - Responsive scaling for all viewport sizes
+ */
+
+/* Premium Typography System */
+html {
+  scroll-behavior: smooth;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  color: #000000;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Serif Headlines - Editorial Premium */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Georgia', 'Garamond', serif;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+h1 {
+  line-height: 1.2;
+  font-weight: 900;
+}
+
+h2 {
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+/* Smooth, intentional transitions globally */
+* {
+  box-sizing: border-box;
+}
+
+/* Premium button baseline */
+@layer components {
+  .btn-primary {
+    @apply px-8 py-3 bg-yellow-400 text-black font-bold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl;
+  }
+
+  .btn-secondary {
+    @apply px-8 py-3 border-2 border-black text-black font-bold rounded-lg transition-all duration-200;
+  }
+
+  .btn-subtle {
+    @apply px-6 py-2 text-black font-semibold hover:text-yellow-400 transition-colors duration-200;
+  }
+
+  /* Premium glow utilities */
+  .glow-golden {
+    filter: drop-shadow(0 0 20px rgba(250, 204, 21, 0.4));
+  }
+
+  .glow-golden-light {
+    filter: drop-shadow(0 0 12px rgba(250, 204, 21, 0.25));
+  }
+
+  /* Soft shadow bloom for cards */
+  .bloom-shadow {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06), 0 0 30px rgba(250, 204, 21, 0.08);
+  }
+
+  .bloom-shadow-lg {
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.12), 0 0 40px rgba(250, 204, 21, 0.15);
+  }
+
+  .bloom-shadow-xl {
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15), 0 0 50px rgba(250, 204, 21, 0.2);
+  }
+
+  /* Gradient text animation foundation */
+  .gradient-text {
+    background: linear-gradient(90deg, #000 0%, #ffb700 50%, #000 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Soft focus with blur (for image reveals) */
+  .blur-soft {
+    filter: blur(8px);
+  }
+
+  .blur-medium {
+    filter: blur(12px);
+  }
+
+  /* Premium drop shadows (for individual elements) */
+  .shadow-premium {
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
+  }
+
+  .shadow-premium-md {
+    filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.12));
+  }
+
+  .shadow-premium-lg {
+    filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.16));
+  }
+}
+
+/* Smooth animations throughout */
+@supports (scroll-behavior: smooth) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Prevent layout shift on scroll */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #000000;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #333333;
+}
