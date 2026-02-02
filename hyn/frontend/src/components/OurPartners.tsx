@@ -1,16 +1,15 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { marqueeSlide, spring, easing } from '../utils/animations';
+import { marqueeSlide, timings, easing } from '../utils/animations';
 
 /**
- * OUR PARTNERS SECTION - Marquee Perfection with Magnetic Hover
+ * OUR PARTNERS SECTION - Premium Glassmorphism Marquee
  *
  * Design Philosophy:
- * - Infinite marquee scroll using premium motion utilities
- * - Pause-on-hover interaction (press to stop)
- * - Individual partner logo glow + scale on hover
- * - Golden glow effect with drop-shadow filter
- * - Magnetic feel with spring.bounce transitions
+ * - Infinite marquee scroll with pause-on-hover
+ * - Glass partner cards with soft borders
+ * - Smooth scale animations with spring physics
+ * - Yellow accent on hover
  * - Enterprise-grade premium look
  */
 
@@ -30,21 +29,22 @@ export default function OurPartners() {
   ];
 
   return (
-    <section className="w-full bg-white py-12 overflow-hidden">
+    <section className="w-full bg-transparent py-12 overflow-hidden">
       <div className="max-w-full">
-        {/* Section Heading */}
-        <motion.div
-          className="text-center mb-8 px-6"
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: easing.smoothOut }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-2xl md:text-3xl font-semibold text-black tracking-tight">
-            Our Partners
-          </h2>
-          <p className="text-gray-600 text-sm mt-2">Trusted by leading companies worldwide</p>
-        </motion.div>
+        {/* Section Heading - Content Surface */}
+        <div className="content-surface text-center mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: easing.smoothOut }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
+              Our Partners
+            </h2>
+            <p className="text-sm mt-2">Trusted by leading companies worldwide</p>
+          </motion.div>
+        </div>
 
         {/* Marquee Container - Pause on hover */}
         <div 
@@ -60,28 +60,26 @@ export default function OurPartners() {
             {partners.map((partner, idx) => (
               <motion.div
                 key={idx}
-                className="flex-shrink-0 h-16 w-24 md:h-20 md:w-32 rounded-lg flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 cursor-pointer"
+                className="flex-shrink-0 h-16 w-24 md:h-20 md:w-32 rounded-2xl flex items-center justify-center bg-white border border-gray-200 cursor-pointer"
                 whileHover={{
-                  scale: 1.12,
-                  filter: 'drop-shadow(0 16px 32px rgba(250, 204, 21, 0.3))',
+                  y: -2,
+                  boxShadow: '0 12px 40px rgba(255,212,0,0.15)',
                 }}
-                transition={spring.bounce}
+                transition={{ duration: timings.standard, ease: easing.gentle }}
+                style={{
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.06)',
+                }}
               >
                 {/* Partner Logo Placeholder */}
                 <div className="flex flex-col items-center justify-center">
                   <motion.div
                     className="w-12 h-12 md:w-14 md:h-14 rounded-full flex items-center justify-center text-white font-bold text-xs md:text-sm"
-                    style={{ backgroundColor: partner.color }}
-                    whileHover={{
-                      scale: 1.15,
-                      filter: 'drop-shadow(0 12px 24px rgba(0, 0, 0, 0.2))',
-                    }}
+                    style={{ backgroundColor: partner.color, opacity: 0.8 }}
                   >
                     {partner.initials}
                   </motion.div>
                   <motion.p 
-                    className="text-xs text-gray-600 mt-1 text-center font-medium"
-                    whileHover={{ color: '#000' }}
+                    className="text-xs text-gray-700 mt-1 text-center font-medium"
                   >
                     {partner.name}
                   </motion.p>
@@ -90,9 +88,9 @@ export default function OurPartners() {
             ))}
           </motion.div>
 
-          {/* Fade gradient overlay (left & right) */}
-          <div className="absolute top-0 left-0 w-12 h-full bg-gradient-to-r from-white to-transparent pointer-events-none" />
-          <div className="absolute top-0 right-0 w-12 h-full bg-gradient-to-l from-white to-transparent pointer-events-none" />
+          {/* Fade gradient overlay (left & right) - Updated for grey bg */}
+          <div className="absolute top-0 left-0 w-12 h-full bg-gradient-to-r from-gray-50 to-transparent pointer-events-none" />
+          <div className="absolute top-0 right-0 w-12 h-full bg-gradient-to-l from-gray-50 to-transparent pointer-events-none" />
         </div>
       </div>
     </section>

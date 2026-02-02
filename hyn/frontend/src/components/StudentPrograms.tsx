@@ -1,28 +1,28 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import {
   staggerContainerVariants,
   staggerItemVariants,
   spring,
   easing,
+  timings,
+  magneticCard,
 } from "../utils/animations";
 import { ImagePlaceholder } from "../utils/imagePlaceholder";
 
 /**
- * STUDENT PROGRAMS - 3D Card Tilt + Light-Follow Effect
- * Premium micro-interactions:
- * - 3D hover tilt with mouse tracking
- * - Light-follow reflection effect
- * - Image zoom with mask reveal on hover
- * - Sequential stagger for ratings
- * - Magnetic card lift with glow
+ * STUDENT PROGRAMS - Premium Glassmorphism Card Grid
+ * 
+ * Premium design:
+ * - Glass card surfaces with backdrop blur and soft borders
+ * - Yellow glow accents on hover with spring animation
+ * - Card lift + subtle scale + perspective transform on hover
+ * - Image zoom and overlay fade on hover
+ * - Responsive grid: 1 col mobile, 2 cols tablet, 4 cols desktop
+ * - Staggered reveal animation with spring physics
+ * - Yellow accent system (no other colors except black/white)
  */
 
 export default function StudentPrograms() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [tiltPos, setTiltPos] = useState({ x: 0, y: 0 });
-
   const courses = [
     {
       title: "Full-Stack Web Development",
@@ -50,33 +50,8 @@ export default function StudentPrograms() {
     }
   ];
 
-  const handleCardMouseMove = (idx: number) => (e: React.MouseEvent<HTMLDivElement>) => {
-    if (hoveredIndex !== idx) return;
-
-    const rect = e.currentTarget.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    // 3D Tilt
-    const tiltX = ((e.clientY - centerY) / (rect.height / 2)) * 8;
-    const tiltY = ((e.clientX - centerX) / (rect.width / 2)) * 8;
-    setTiltPos({ x: tiltY, y: tiltX });
-
-    // Light-follow reflection
-    setMousePos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-  };
-
-  const handleCardLeave = () => {
-    setHoveredIndex(null);
-    setTiltPos({ x: 0, y: 0 });
-    setMousePos({ x: 0, y: 0 });
-  };
-
   return (
-    <section id="programs" className="w-full bg-white py-20 px-6">
+    <section id="programs" className="w-full bg-transparent py-20 px-6">
       <motion.div
         className="max-w-6xl mx-auto"
         variants={staggerContainerVariants}
@@ -84,27 +59,35 @@ export default function StudentPrograms() {
         whileInView="visible"
         viewport={{ once: false, amount: 0.2 }}
       >
-        {/* Section Header */}
-        <motion.div className="text-center mb-12" variants={staggerItemVariants}>
-          <h2 className="text-5xl md:text-6xl font-bold text-black mb-4">
-            Student Learning Programs
-          </h2>
-          <p className="text-lg text-gray-700 mb-4">
-            Comprehensive courses designed to launch your tech career.
-          </p>
-          <a href="#" className="text-yellow-400 font-semibold hover:underline">
-            Browse all student courses →
-          </a>
-        </motion.div>
+        {/* Section Header - Content Surface */}
+        <div className="content-surface text-center">
+          <motion.div variants={staggerItemVariants}>
+            <h2 className="text-5xl md:text-6xl font-serif font-bold mb-4">
+              Student Learning Programs
+            </h2>
+            <p className="text-lg mb-6 max-w-2xl mx-auto leading-relaxed">
+              Comprehensive courses designed to launch your tech career.
+            </p>
+            <motion.a 
+              href="#" 
+              className="inline-block text-yellow-400 font-semibold hover:text-white transition-colors"
+              whileHover={{ scale: 1.05 }}
+            >
+              Browse all student courses →
+            </motion.a>
+          </motion.div>
+        </div>
 
-        {/* YouTube Video Embed */}
+        {/* YouTube Video Embed - centered, supportive, elevated */}
         <motion.div
-          className="mb-12 aspect-video rounded-lg overflow-hidden shadow-lg"
+          className="mb-16 mx-auto max-w-3xl rounded-2xl overflow-hidden bg-white border border-gray-200 elevation-2 h-56 sm:h-64 md:h-80"
           variants={staggerItemVariants}
+          style={{
+            boxShadow: '0 12px 36px rgba(0,0,0,0.08)',
+          }}
         >
           <iframe
-            width="100%"
-            height="100%"
+            className="w-full h-full"
             src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=placeholder"
             title="Student Programs Overview"
             frameBorder="0"
@@ -113,106 +96,84 @@ export default function StudentPrograms() {
           ></iframe>
         </motion.div>
 
-        {/* Course Cards */}
+        {/* Course Cards - Modern flat + depth grid */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8"
           variants={staggerContainerVariants}
         >
           {courses.map((course, idx) => (
-            <motion.div
-              key={idx}
-              className="bg-white border border-black/10 rounded-2xl overflow-hidden transition-all duration-300 group perspective"
-              variants={staggerItemVariants}
-              onMouseMove={handleCardMouseMove(idx)}
-              onMouseEnter={() => setHoveredIndex(idx)}
-              onMouseLeave={handleCardLeave}
-              style={{
-                rotateX: hoveredIndex === idx ? tiltPos.y : 0,
-                rotateY: hoveredIndex === idx ? tiltPos.x : 0,
-                perspective: '1200px',
-              }}
-              whileHover={{
-                scale: 1.04,
-                filter: 'drop-shadow(0 30px 60px rgba(0,0,0,0.12), 0 0 40px rgba(250,204,21,0.12))',
-              }}
-              transition={spring.bounce}
-            >
-              {/* Light-Follow Reflection Overlay */}
-              {hoveredIndex === idx && (
-                <motion.div
-                  className="absolute inset-0 pointer-events-none z-10"
-                  style={{
-                    background: `radial-gradient(600px at ${mousePos.x}px ${mousePos.y}px, rgba(255,255,255,0.4), transparent 80%)`,
-                  }}
-                  animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                />
-              )}
-
-              {/* Image Container - ZOOM on hover with mask reveal */}
-              <div className="w-full overflow-hidden relative h-40">
+            <motion.div key={idx} variants={staggerItemVariants} className="relative">
+              <motion.div
+                className="course-card relative rounded-2xl overflow-hidden group card card-glow-subtle transition-all duration-250 bg-white border border-gray-200 elevation-2"
+                whileHover={{ y: -6, scale: 1.01, boxShadow: '0 22px 56px rgba(255,212,0,0.12)' }}
+                transition={{ type: 'spring', stiffness: 420, damping: 38 }}
+                style={{ boxShadow: '0 8px 20px rgba(0,0,0,0.06)' }}
+              >
+                {/* Ambient glow element (revealed via CSS on group:hover / focus) */}
+                <div aria-hidden className="card-glow card-glow-subtle" />
+              {/* Image Container - smooth zoom on hover */}
+              <div className="w-full overflow-hidden relative h-48 bg-gray-100">
                 <motion.div
                   whileHover={{ scale: 1.08 }}
-                  transition={{ duration: 0.5, ease: easing.smoothOut }}
+                  transition={{ duration: timings.standard, ease: easing.smoothOut }}
+                  className="absolute inset-0"
                 >
                   <ImagePlaceholder
                     alt={course.title}
                     aspectRatio="16:9"
-                    containerClassName="rounded-none"
+                    containerClassName="rounded-none w-full h-full object-cover"
                   />
                 </motion.div>
+                {/* Gradient overlay - fade on hover */}
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/40 opacity-60"
+                  whileHover={{ opacity: 0.3 }}
+                  transition={{ duration: timings.fast }}
+                  style={{ pointerEvents: 'none' }}
+                />
               </div>
 
-              {/* Card Content - SLIDE UP on hover */}
-              <motion.div
-                className="p-6"
-                initial={{ y: 0 }}
-                animate={hoveredIndex === idx ? { y: -6 } : { y: 0 }}
-                transition={{ ...spring.soft, duration: 0.28, ease: easing.smoothOut as any }}
-              >
-                {/* Course Header */}
-                <h3 className="text-xl font-bold text-black mb-2">{course.title}</h3>
+              {/* Card Content */}
+              <div className="p-6">
+                {/* Course Title */}
+                <h3 className="text-xl font-serif font-bold text-white mb-3">
+                  {course.title}
+                </h3>
 
-                {/* Rating - Sequential stagger on hover */}
-                <motion.div className="flex items-center gap-2 mb-4">
-                  <motion.span
-                    className="text-yellow-400 font-bold"
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={hoveredIndex === idx ? { opacity: 1, scale: 1 } : { opacity: 1, scale: 1 }}
-                    transition={{ ...spring.bounce, delay: 0.05 }}
-                  >
+                {/* Rating with yellow stars */}
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-yellow-400 font-bold text-sm">
                     {course.rating}
-                  </motion.span>
+                  </span>
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, i) => (
-                      <motion.span
-                        key={i}
-                        className="text-yellow-400"
-                        initial={{ opacity: 0, y: -4 }}
-                        animate={hoveredIndex === idx ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
-                        transition={{ ...spring.bounce, delay: i * 0.04 }}
-                      >
+                      <span key={i} className="text-yellow-400 text-xs">
                         ★
-                      </motion.span>
+                      </span>
                     ))}
                   </div>
-                </motion.div>
+                </div>
 
-                {/* Duration */}
-                <p className="text-sm text-gray-600 mb-3">{course.duration}</p>
+                {/* Duration - secondary text */}
+                <p className="text-sm text-white/60 mb-3 font-medium">{course.duration}</p>
 
                 {/* Description */}
-                <p className="text-gray-700 mb-6">{course.description}</p>
+                <p className="text-gray-600 text-sm mb-6 leading-relaxed">{course.description}</p>
 
-                {/* Button - Magnetic with glow */}
+                {/* CTA Button - Yellow glow on hover */}
                 <motion.button
-                  whileHover={{ scale: 1.06, y: -2 }}
+                  whileHover={{ y: -2, boxShadow: '0 12px 40px rgba(255,212,0,0.25)' }}
                   whileTap={{ scale: 0.98 }}
-                  transition={spring.bounce}
-                  className="w-full py-2 bg-black text-white font-semibold hover:bg-gray-900 transition-all duration-200 rounded-lg shadow-premium hover:shadow-premium-md"
+                  transition={{ type: 'spring', stiffness: 480, damping: 36 }}
+                  className="w-full py-3 bg-black hover:bg-yellow-400 hover:text-black text-white font-bold rounded-xl transition-all duration-200"
+                  style={{
+                    boxShadow: '0 4px 12px rgba(255,212,0,0.12)',
+                    willChange: 'transform, box-shadow',
+                  }}
                 >
                   View Program
                 </motion.button>
+              </div>
               </motion.div>
             </motion.div>
           ))}

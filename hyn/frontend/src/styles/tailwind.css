@@ -27,6 +27,159 @@
  * - Responsive scaling for all viewport sizes
  */
 
+/* ========== SPLINE & HERO LAYERING & INTERACTION ========== */
+.spline-bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+}
+
+/* Allow vertical touch scrolling on mobile */
+body {
+  touch-action: pan-y;
+}
+
+/* Ensure the Spline viewer and its canvas are crystal clear and interactive */
+spline-viewer,
+spline-viewer *,
+canvas {
+  pointer-events: auto !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Disable mouse-blocking on large layout wrappers so events pass to Spline */
+.hero,
+.hero-section,
+.hero-wrapper,
+.overlay,
+.glass,
+.glass-overlay {
+  pointer-events: none !important;
+}
+
+/* Re-enable interaction only for the text card and its children */
+.hero-content,
+.hero-content * {
+  pointer-events: auto !important;
+}
+
+/* UI overlay strategy: overlay doesn't block background mouse movement, but interactive elements are re-enabled */
+.ui-overlay {
+  pointer-events: none !important;
+  position: relative;
+  z-index: 1;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.ui-overlay a,
+.ui-overlay button,
+.ui-overlay .course-card,
+.ui-overlay .hero-content {
+  pointer-events: auto !important;
+}
+
+/* Page content should allow pointer-through to Spline; re-enable interactive children */
+.page-content {
+  pointer-events: none;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.page-content a,
+.page-content button,
+.course-card {
+  pointer-events: auto;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Additional selectors requested: ensure broad wrappers don't block mouse */
+.hero-wrapper,
+.glass,
+.glass-overlay {
+  pointer-events: none !important;
+}
+
+/* Hide Spline watermark / branding */
+spline-viewer::part(logo),
+.spline-watermark,
+.spline-branding,
+spline-viewer .branding,
+spline-viewer .logo {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Make interactive site chrome available even when app-content is pointer-events:none */
+.app-content .fixed,
+.app-content nav,
+.app-content header,
+.app-content .btn-primary,
+.app-content .btn-secondary,
+.app-content a,
+.app-content button {
+  pointer-events: auto !important;
+}
+
+/* Overlay helpers - overlays must not block pointer events */
+.overlay,
+.hero .overlay {
+  pointer-events: none !important;
+}
+
+/* Hero layout */
+.hero {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  padding-left: 6rem; /* 96px */
+}
+
+.hero-content {
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 24px;
+  padding: 2.5rem 3rem; /* 40px 48px */
+  max-width: 460px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+@media (max-width: 1024px) {
+  .hero { padding-left: 1.5rem; }
+  .hero-content { max-width: 100%; }
+}
+
+/* Ensure no global full-screen blur */
+html body .backdrop-blur-full {
+  backdrop-filter: none !important;
+}
+
+/* ============================================================
+   CRITICAL: Viewport and Root Element Sizing
+   Must ensure Spline background fills entire viewport
+   ============================================================ */
+
+html,
+body,
+#root {
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
 /* Premium Typography System */
 html {
   scroll-behavior: smooth;
@@ -36,7 +189,7 @@ html {
 body {
   margin: 0;
   padding: 0;
-  background-color: #ffffff;
+  background-color: transparent;
   color: #000000;
   font-weight: 400;
   letter-spacing: -0.01em;
@@ -71,42 +224,476 @@ h2 {
   box-sizing: border-box;
 }
 
-/* Premium button baseline */
+/* ============================================================
+   MODERN FLAT + DEPTH COMPONENT LAYER
+   
+   Design Philosophy:
+   - Clean, minimalist aesthetic with intentional depth
+   - Soft, layered shadows creating elevation hierarchy
+   - No harsh shadows; maintain visual elegance
+   - Smooth transitions (150-350ms) with purposeful easing
+   - Premium look through subtle dimensionality
+   ============================================================ */
+
 @layer components {
-  .btn-primary {
-    @apply px-8 py-3 bg-yellow-400 text-black font-bold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl;
+  /* ========== DEPTH ELEVATION UTILITIES ========== */
+  
+  /* Level 0: Flat, no depth (backgrounds) */
+  .elevation-0 {
+    @apply shadow-none;
+  }
+  
+  /* Level 1: Subtle lift (buttons, inputs, badges) */
+  .elevation-1 {
+    @apply shadow-depth-sm;
+  }
+  
+  /* Level 2: Soft float (cards, sections) */
+  .elevation-2 {
+    @apply shadow-depth-md;
+  }
+  
+  /* Level 3: Clear separation (floating elements, dropdowns, popovers) */
+  .elevation-3 {
+    @apply shadow-depth-lg;
+  }
+  
+  /* Level 4: Premium float (modals, overlays) */
+  .elevation-4 {
+    @apply shadow-depth-xl;
+  }
+  
+  /* ========== PRIMARY BUTTON (CTA-style) ========== */
+  .primary-btn {
+    background: #FFD400;
+    color: #000000;
+    padding: 0.9rem 2.2rem;
+    border-radius: 999px;
+    font-weight: 600;
+    transition: all 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: none;
   }
 
+  .primary-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 12px 30px rgba(255, 212, 0, 0.5);
+  }
+
+  .primary-btn:active {
+    transform: translateY(0) scale(0.98);
+  }
+  
+  /* Secondary: Black outline with subtle depth */
   .btn-secondary {
-    @apply px-8 py-3 border-2 border-black text-black font-bold rounded-lg transition-all duration-200;
+    @apply px-8 py-3 border-2 border-black text-black font-bold rounded-lg 
+           transition-all duration-200 elevation-1 hover:elevation-2 active:elevation-0;
+    transform: translateY(0);
   }
-
+  
+  .btn-secondary:active {
+    transform: translateY(1px);
+  }
+  
+  /* Tertiary: Subtle text button */
   .btn-subtle {
-    @apply px-6 py-2 text-black font-semibold hover:text-yellow-400 transition-colors duration-200;
+    @apply px-6 py-2 text-black font-semibold hover:text-yellow-400 
+           transition-colors duration-200 relative;
   }
-
-  /* Premium glow utilities */
-  .glow-golden {
-    filter: drop-shadow(0 0 20px rgba(250, 204, 21, 0.4));
+  
+  .btn-subtle::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-250;
   }
-
-  .glow-golden-light {
-    filter: drop-shadow(0 0 12px rgba(250, 204, 21, 0.25));
+  
+  .btn-subtle:hover::after {
+    @apply w-full;
   }
-
-  /* Soft shadow bloom for cards */
+  
+  /* ========== CARD SYSTEM ========== */
+  
+  /* Base card with depth layer 2 */
+  .card {
+    @apply bg-white rounded-xl elevation-2 transition-all duration-250;
+  }
+  
+  .card:hover {
+    @apply elevation-3;
+  }
+  
+  /* Interactive card with hover depth increase */
+  .card-interactive {
+    @apply card cursor-pointer;
+  }
+  
+  .card-interactive:hover {
+    transform: translateY(-2px);
+  }
+  
+  /* Featured/highlight card */
+  .card-featured {
+    @apply card elevation-3;
+  }
+  
+  /* ========== INPUT SYSTEM ========== */
+  
+  .input-field {
+    @apply w-full px-4 py-3 border border-gray-200 rounded-lg 
+           transition-all duration-200 elevation-1
+           focus:outline-none focus:border-black focus:elevation-2;
+  }
+  
+  .input-field::placeholder {
+    @apply text-gray-400;
+  }
+  
+  /* ========== PREMIUM GLOW UTILITIES ========== */
+  
+  /* Golden/accent glow for yellow elements */
+  .glow-accent {
+    @apply shadow-glow-accent;
+  }
+  
+  .glow-accent-sm {
+    @apply shadow-glow-accent-sm;
+  }
+  
+  /* Bloom shadow (soft, atmospheric) */
   .bloom-shadow {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06), 0 0 30px rgba(250, 204, 21, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06), 0 0 30px rgba(255, 212, 0, 0.08);
   }
-
+  
   .bloom-shadow-lg {
-    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.12), 0 0 40px rgba(250, 204, 21, 0.15);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.12), 0 0 40px rgba(255, 212, 0, 0.15);
   }
-
+  
   .bloom-shadow-xl {
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15), 0 0 50px rgba(250, 204, 21, 0.2);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15), 0 0 50px rgba(255, 212, 0, 0.2);
+  }
+  
+  /* ========== CARD GLOW UTILITIES (Ambient, GPU-friendly) ========== */
+  /* Use with `group` on the interactive parent to reveal on hover/focus */
+  .card-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    opacity: 0;
+    transform: scale(0.98);
+    transition: opacity 220ms cubic-bezier(.33,.01,.2,1), transform 220ms cubic-bezier(.33,.01,.2,1);
+    will-change: opacity, transform;
   }
 
+  .group:hover .card-glow,
+  .group:focus-within .card-glow {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Subtle professional glow for Student cards (soft yellow, low opacity) */
+  .card-glow-subtle {
+    background: radial-gradient(60% 40% at 12% 18%, rgba(255,212,0,0.10), transparent 25%), radial-gradient(50% 30% at 88% 82%, rgba(255,212,0,0.06), transparent 35%);
+    filter: blur(26px);
+  }
+
+  /* Playful glow for Kids cards (multicolor, soft neon) */
+  .card-glow-playful {
+    background: radial-gradient(40% 30% at 20% 18%, rgba(255,140,84,0.12), transparent 20%), radial-gradient(50% 30% at 80% 80%, rgba(120,204,255,0.10), transparent 30%);
+    filter: blur(28px);
+  }
+
+  /* Small subtle glow variant for lightweight cards */
+  .card-glow-sm {
+    opacity: 0.85;
+    transform: scale(1);
+    filter: blur(14px);
+    transition-duration: 180ms;
+  }
+
+  /* ========== COURSE CARD SURFACE (CRITICAL: Sharp, clear, no blur) ========== */
+  .course-card {
+    background: #FFFFFF !important;
+    color: #111111 !important;
+    border-radius: 16px;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.05) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    filter: none !important;
+    -webkit-filter: none !important;
+    border: none !important;
+    position: relative;
+    z-index: 10;
+    opacity: 1 !important;
+    transform: translateZ(0);
+    will-change: transform, box-shadow;
+    transition: transform 350ms cubic-bezier(0.34, 1.56, 0.64, 1), 
+                box-shadow 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* All children of course cards must be sharp */
+  .course-card * {
+    filter: none !important;
+    -webkit-filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    opacity: 1 !important;
+  }
+
+  .course-card img {
+    filter: none !important;
+    -webkit-filter: none !important;
+    opacity: 1 !important;
+    mix-blend-mode: normal !important;
+  }
+
+  /* Text inside cards MUST be sharp and readable */
+  .course-card h3,
+  .course-card h4,
+  .course-card p,
+  .course-card span {
+    color: #111111 !important;
+    filter: none !important;
+    -webkit-filter: none !important;
+    opacity: 1 !important;
+  }
+
+  /* Smooth hover animation (premium, no blur) */
+  .course-card:hover {
+    transform: translateY(-8px) scale(1.02) translateZ(0) !important;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25) !important;
+  }
+
+  .course-card:focus-within {
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25) !important;
+  }
+
+  /* ========== REUSABLE CONTENT SURFACE (Global text background) ========== */
+  .content-surface {
+    max-width: 1000px;
+    margin: 4rem auto;
+    padding: 3rem 3.5rem;
+    background: linear-gradient(
+      160deg,
+      rgba(18, 18, 18, 0.95),
+      rgba(5, 5, 5, 0.95)
+    );
+    border-radius: 28px;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.05),
+      0 40px 100px rgba(0, 0, 0, 0.85);
+  }
+
+  .content-surface h1,
+  .content-surface h2,
+  .content-surface h3,
+  .content-surface h4,
+  .content-surface h5,
+  .content-surface h6 {
+    color: #ffffff !important;
+  }
+
+  .content-surface p,
+  .content-surface li,
+  .content-surface span {
+    color: #e6e6e6 !important;
+  }
+
+  .content-surface .highlight,
+  .content-surface .accent {
+    color: #ffd400 !important;
+  }
+
+  .content-surface button,
+  .content-surface a.button {
+    background: #ffd400;
+    color: #000;
+    border-radius: 999px;
+    padding: 0.8rem 1.8rem;
+    font-weight: 600;
+    transition: all 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: none;
+  }
+
+  .content-surface button:hover,
+  .content-surface a.button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 40px rgba(255, 212, 0, 0.55);
+  }
+
+  .content-surface button:active,
+  .content-surface a.button:active {
+    transform: translateY(-1px);
+  }
+
+  /* ========== TEXT COLOR SYSTEM ========== */
+  h1, h2, h3, h4, h5, h6 {
+    color: #FFFFFF !important;
+  }
+
+  p {
+    color: #EAEAEA !important;
+    opacity: 1 !important;
+  }
+
+  span {
+    color: #EAEAEA !important;
+  }
+
+  .highlight-text,
+  .section-title,
+  .section-heading {
+    color: #FFD400 !important;
+  }
+
+  .section-description,
+  .section-text {
+    color: #EAEAEA !important;
+    opacity: 1 !important;
+  }
+
+  /* ========== NAVBAR STYLING (Button-like links with lightning hover) ========== */
+  .navbar {
+    background: transparent !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Brand Container & Logo Placeholder */
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .brand-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #ffd400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 15px rgba(255, 212, 0, 0.15);
+  }
+
+  .navbar a {
+    position: relative;
+    color: #ffd400;
+    padding: 0.7rem 1.4rem;
+    border-radius: 999px;
+    background: rgba(255, 212, 0, 0.08);
+    transition: all 350ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: inline-block;
+    overflow: hidden;
+    font-weight: 500;
+  }
+
+  /* Lightning hover effect */
+  .navbar a::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(255, 255, 255, 0.6),
+      transparent
+    );
+    transition: left 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .navbar a:hover::before {
+    left: 100%;
+  }
+
+  .navbar a:hover {
+    background: rgba(255, 212, 0, 0.22);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 10px 30px rgba(255, 212, 0, 0.45);
+    color: #ffffff;
+  }
+
+  .navbar a:active {
+    transform: scale(0.96);
+  }
+
+  .navbar,
+  .navbar * {
+    pointer-events: auto;
+  }
+
+  /* ========== DROPDOWN MENUS ========== */
+  .dropdown-menu {
+    background: rgba(15, 15, 15, 0.98) !important;
+    border-radius: 18px;
+    padding: 1rem;
+    backdrop-filter: none !important;
+    border: 1px solid rgba(255, 212, 0, 0.1) !important;
+  }
+
+  /* Explore Programs - Slide + Fade animation */
+  .dropdown-programs {
+    animation: slideFade 350ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  @keyframes slideFade {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* More - Scale + Blur Reveal animation */
+  .dropdown-more {
+    animation: scaleBlur 300ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  @keyframes scaleBlur {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+      filter: blur(6px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+      filter: blur(0);
+    }
+  }
+
+  .dropdown-menu a {
+    color: #FFD400;
+    transition: all 200ms ease;
+  }
+
+  .dropdown-menu a:hover {
+    background: rgba(255, 212, 0, 0.1);
+    color: #FFFFFF;
+  }
+
+  /* ========== DROPDOWN SMOOTH ANIMATION ========== */
+  .dropdown-menu {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 250ms ease, transform 250ms ease;
+    pointer-events: none;
+  }
+
+  .dropdown:hover .dropdown-menu,
+  .dropdown:focus-within .dropdown-menu {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  
+  /* ========== TYPOGRAPHY EFFECTS ========== */
+  
   /* Gradient text animation foundation */
   .gradient-text {
     background: linear-gradient(90deg, #000 0%, #ffb700 50%, #000 100%);
@@ -115,27 +702,66 @@ h2 {
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-
-  /* Soft focus with blur (for image reveals) */
+  
+  /* ========== FILTER & FOCUS EFFECTS ========== */
+  
+  /* Soft focus for image reveals */
   .blur-soft {
     filter: blur(8px);
   }
-
+  
   .blur-medium {
     filter: blur(12px);
   }
-
-  /* Premium drop shadows (for individual elements) */
+  
+  /* Premium drop shadows (for SVG, images) */
   .shadow-premium {
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
   }
-
+  
   .shadow-premium-md {
     filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.12));
   }
-
+  
   .shadow-premium-lg {
     filter: drop-shadow(0 16px 40px rgba(0, 0, 0, 0.16));
+  }
+  
+  /* ========== LAYERING & DEPTH ========== */
+  
+  /* Inset shadows for depth perception */
+  .inset-depth {
+    @apply shadow-inset-top shadow-inset-bottom;
+  }
+  
+  /* Frosted glass effect (subtle) */
+  .frosted {
+    @apply backdrop-blur-sm bg-white/80;
+  }
+  
+  /* ========== CURSOR FOLLOWER ========== */
+  #cursor-follower {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    font-size: 20px;
+    transform: translate(-50%, -50%);
+    transition: transform 80ms linear;
+    z-index: 9999;
+    opacity: 0.8;
+  }
+  
+  /* ========== INTERACTION STATES ========== */
+  
+  /* Focus-visible for keyboard navigation */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2;
+  }
+  
+  /* Disabled state */
+  .disabled-state {
+    @apply opacity-50 cursor-not-allowed;
   }
 }
 
@@ -162,4 +788,34 @@ h2 {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #333333;
+}
+/* ========== COMING SOON PAGE (REUSABLE TEMPLATE) ========== */
+.coming-soon {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #ffffff;
+  position: relative;
+  z-index: 20;
+}
+
+.coming-soon h1 {
+  font-size: 3rem;
+  color: #ffd400;
+  font-weight: 900;
+  margin: 0;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.coming-soon p {
+  font-size: 1.125rem;
+  color: #e6e6e6;
+  margin: 0;
+  font-weight: 400;
+  max-width: 600px;
+  letter-spacing: -0.01em;
 }

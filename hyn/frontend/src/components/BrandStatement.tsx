@@ -1,31 +1,16 @@
 import { motion } from 'framer-motion';
 
 /**
- * BRAND STATEMENT SECTION - Elite Cinematic Design
+ * BRAND STATEMENT SECTION - Premium Glassmorphism + Cinematic
  *
  * Design Philosophy:
- * - FILM GRAIN OVERLAY: Subtle noise texture for cinematic feel
- * - GLOW EFFECTS: Yellow words have subtle text-shadow glow
- * - Custom bezier [0.22, 1, 0.36, 1] for Apple-like premium motion
- * - Staggered word reveals with whileInView triggers
- * - Full black background = power and premium positioning
- * - White text = maximum contrast and readability
- * - Production-quality animation and atmosphere
- *
- * Purpose:
- * - Acts as emotional visual separator with cinematic impact
- * - Reinforces brand authority with premium aesthetics
- * - Glow effects on yellow highlights create visual hierarchy
- * - Film grain adds texture and sophistication
- *
- * Features:
- * - Full viewport height with centered content
- * - Deep black background with gradient depth
- * - Serif headline with glowing yellow accent words
- * - Supporting subtext in refined gray
- * - Film grain overlay for texture
- * - Smooth scroll-triggered entrance animations
- * - Fully responsive design
+ * - Full black background with cinematic presence
+ * - Serif headline with yellow glow accents
+ * - Staggered word-by-word entrance animation with blur-in effect
+ * - Glass panel with soft borders and backdrop blur
+ * - Yellow glow effects on key words
+ * - Premium, sophisticated atmosphere
+ * - Animated gradient overlays for depth
  */
 
 const customBezier = [0.22, 1, 0.36, 1] as const;
@@ -46,7 +31,7 @@ export default function BrandStatement() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.08,
+        staggerChildren: 0.12,
         delayChildren: 0.2,
       },
     },
@@ -67,35 +52,21 @@ export default function BrandStatement() {
 
   return (
     <section className="relative w-full min-h-screen bg-black flex items-center justify-center overflow-hidden">
-      {/* Premium Background Gradient (subtle depth) */}
+      {/* Premium Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-black via-black to-gray-950 opacity-100" />
       
-      {/* FILM GRAIN OVERLAY - Cinematic texture */}
+      {/* Main Content Container - Glass Panel */}
       <motion.div
-        className="absolute inset-0 opacity-[0.015] pointer-events-none"
-        animate={{
-          backgroundPosition: ['0% 0%', '100% 100%'],
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: 'linear',
-        }}
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100' height='100' fill='white' filter='url(%23noise)' /%3E%3C/svg%3E")`,
-          backgroundSize: '100px 100px',
-        }}
-      />
-
-      {/* Main Content Container */}
-      <motion.div
-        className="relative z-10 max-w-5xl mx-auto text-center px-6 py-20"
+        className="relative z-10 max-w-5xl mx-auto text-center px-6 py-20 bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true, amount: 0.3 }}
+        style={{
+          boxShadow: '0 8px 32px rgba(255,212,0,0.06), inset 0 1px 1px rgba(255,255,255,0.2)',
+        }}
       >
-        {/* Headline - Staggered Word Animation with GLOW Effects */}
+        {/* Headline - Staggered Word Animation */}
         <motion.div
           className="flex flex-wrap justify-center gap-2 md:gap-3 mb-10"
           variants={containerVariants}
@@ -107,11 +78,11 @@ export default function BrandStatement() {
             <motion.span
               key={index}
               variants={wordVariants}
-              className={`text-4xl md:text-5xl lg:text-7xl font-serif font-bold leading-tight ${word.color} tracking-tight ${
-                word.glow ? 'drop-shadow-[0_0_20px_rgba(250,204,21,0.4)]' : ''
+              className={`text-4xl md:text-5xl lg:text-7xl font-serif font-black leading-tight ${word.color} tracking-tight ${
+                word.glow ? 'drop-shadow-[0_0_30px_rgba(255,212,0,0.5)]' : ''
               }`}
               style={word.glow ? {
-                textShadow: '0 0 20px rgba(250, 204, 21, 0.5), 0 0 40px rgba(250, 204, 21, 0.3)',
+                textShadow: '0 0 25px rgba(255,212,0,0.6), 0 0 50px rgba(255,212,0,0.4), 0 0 80px rgba(255,212,0,0.2)',
               } : {}}
             >
               {word.text}
@@ -119,18 +90,18 @@ export default function BrandStatement() {
           ))}
         </motion.div>
 
-        {/* Supporting Subtext - Premium Typography */}
+        {/* Supporting Subtext */}
         <motion.p
-          className="text-lg lg:text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed font-light mb-16"
+          className="text-lg lg:text-xl text-white/70 max-w-3xl mx-auto leading-relaxed mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.5, ease: 'easeOut' }}
+          transition={{ duration: 0.7, delay: 0.5, ease: customBezier }}
           viewport={{ once: true, amount: 0.5 }}
         >
           Hands-on learning with guided mentorship from industry experts. Real skills for real jobs. No fluff. Just results.
         </motion.p>
 
-        {/* Hidden CTA hint - subtle interactive element */}
+        {/* Scroll Hint */}
         <motion.div
           className="flex justify-center"
           initial={{ opacity: 0, y: 10 }}
@@ -148,7 +119,7 @@ export default function BrandStatement() {
         </motion.div>
       </motion.div>
 
-      {/* Decorative Elements - Subtle Premium Blur */}
+      {/* Decorative Blur Elements */}
       <motion.div
         className="absolute top-20 right-0 w-96 h-96 bg-yellow-400/5 rounded-full blur-3xl"
         animate={{

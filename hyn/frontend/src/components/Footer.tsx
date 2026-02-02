@@ -1,47 +1,24 @@
 import { motion } from 'framer-motion';
-import { easing, spring } from '../utils/animations';
+import { easing, staggerContainerVariants, staggerItemVariants, timings } from '../utils/animations';
 
 /**
- * MAIN FOOTER - Premium Enterprise Footer with Elegant Reveals
+ * MAIN FOOTER - Premium Glassmorphism Footer
  *
  * Design Philosophy:
- * - Fade-up reveal on scroll for main sections (staggered)
- * - Animated link underlines on hover
- * - Social icon glow effect using drop-shadow filters
- * - Golden accent colors on interaction
- * - Smooth premium transitions throughout
- * - Premium enterprise-grade feel with polish
- *
- * Columns:
- * 1. Trending Programs
- * 2. Browse Courses
- * 3. Quick Links
- * 4. Brand & Contact Info
+ * - Black background with subtle glass accent panels
+ * - Yellow accent on interactive elements
+ * - Staggered entrance animations for sections
+ * - Smooth hover effects with spring physics
+ * - Yellow / Black / White color system only
+ * - Enterprise-grade premium feel with soft glass accents
  */
 
 export default function Footer() {
   // Container with staggered fade-up entrance
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.15,
-      },
-    },
-  };
+  const containerVariants = staggerContainerVariants;
 
   // Fade-up reveal for section headings and content
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30, filter: 'blur(8px)' },
-    visible: {
-      opacity: 1,
-      y: 0,
-      filter: 'blur(0px)',
-      transition: { duration: 0.7, ease: easing.smoothOut },
-    },
-  };
+  const itemVariants = staggerItemVariants;
 
   // Link underline animation on hover
   const linkVariants = {
@@ -51,13 +28,13 @@ export default function Footer() {
       x: 0,
       transition: {
         delay: i * 0.06,
-        duration: 0.5,
+        duration: timings.fast,
         ease: easing.smoothOut,
       },
     }),
   };
 
-  // Social icons with glow effect
+  // Social icons entrance
   const socialVariants = {
     hidden: { opacity: 0, scale: 0.6 },
     visible: (i: number) => ({
@@ -65,7 +42,8 @@ export default function Footer() {
       scale: 1,
       transition: {
         delay: 0.6 + i * 0.1,
-        ...spring.soft,
+        duration: timings.standard,
+        ease: easing.gentle,
       },
     }),
   };
@@ -135,18 +113,11 @@ export default function Footer() {
                   >
                     <motion.a
                       href="#"
-                      className="text-gray-400 text-sm hover:text-yellow-400 transition-colors duration-200 inline-block relative group"
-                      whileHover={{ x: 6 }}
-                      transition={spring.snappy}
+                      className="text-white/60 text-sm hover:text-yellow-400 transition-colors duration-200 inline-block"
+                      whileHover={{ x: 4 }}
+                      transition={{ duration: timings.standard, ease: easing.gentle }}
                     >
                       {link}
-                      {/* Animated underline on hover */}
-                      <motion.span
-                        className="absolute bottom-0 left-0 h-0.5 bg-yellow-400"
-                        initial={{ width: 0 }}
-                        whileHover={{ width: '100%' }}
-                        transition={{ duration: 0.3, ease: easing.smoothOut }}
-                      />
                     </motion.a>
                   </motion.li>
                 ))}
@@ -168,18 +139,11 @@ export default function Footer() {
                   >
                     <motion.a
                       href="#"
-                      className="text-gray-400 text-sm hover:text-yellow-400 transition-colors duration-200 inline-block relative group"
-                      whileHover={{ x: 6 }}
-                      transition={spring.snappy}
+                      className="text-white/60 text-sm hover:text-yellow-400 transition-colors duration-200 inline-block"
+                      whileHover={{ x: 4 }}
+                      transition={{ duration: timings.standard, ease: easing.gentle }}
                     >
                       {link}
-                      {/* Animated underline on hover */}
-                      <motion.span
-                        className="absolute bottom-0 left-0 h-0.5 bg-yellow-400"
-                        initial={{ width: 0 }}
-                        whileHover={{ width: '100%' }}
-                        transition={{ duration: 0.3, ease: easing.smoothOut }}
-                      />
                     </motion.a>
                   </motion.li>
                 ))}
@@ -201,18 +165,11 @@ export default function Footer() {
                   >
                     <motion.a
                       href="#"
-                      className="text-gray-400 text-sm hover:text-yellow-400 transition-colors duration-200 inline-block relative group"
-                      whileHover={{ x: 6 }}
-                      transition={spring.snappy}
+                      className="text-white/60 text-sm hover:text-yellow-400 transition-colors duration-200 inline-block"
+                      whileHover={{ x: 4 }}
+                      transition={{ duration: timings.standard, ease: easing.gentle }}
                     >
                       {link}
-                      {/* Animated underline on hover */}
-                      <motion.span
-                        className="absolute bottom-0 left-0 h-0.5 bg-yellow-400"
-                        initial={{ width: 0 }}
-                        whileHover={{ width: '100%' }}
-                        transition={{ duration: 0.3, ease: easing.smoothOut }}
-                      />
                     </motion.a>
                   </motion.li>
                 ))}
@@ -225,26 +182,26 @@ export default function Footer() {
               <div className="mb-8">
                 <div className="flex items-center gap-3 mb-2">
                   <motion.div 
-                    className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0"
+                    className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0 elevation-2 hover:elevation-3"
                     whileHover={{
-                      scale: 1.1,
-                      filter: 'drop-shadow(0 8px 16px rgba(250, 204, 21, 0.4))',
+                      y: -2,
                     }}
+                    transition={{ duration: timings.standard, ease: easing.gentle }}
                   >
                     <span className="text-black font-black text-sm">HN</span>
                   </motion.div>
                   <span className="text-white font-semibold text-lg">Hyntrixx</span>
                 </div>
-                <p className="text-gray-500 text-xs">Premium Education Platform</p>
+                <p className="text-white/60 text-xs">Premium Education Platform</p>
               </div>
 
               {/* Contact Info */}
               <div className="space-y-4 mb-8">
                 <div>
-                  <p className="text-gray-500 text-xs mb-1 tracking-widest">INDIA</p>
+                  <p className="text-white/50 text-xs mb-1 tracking-widest">INDIA</p>
                   <motion.a 
                     href="tel:+918012344567" 
-                    className="text-gray-400 hover:text-yellow-400 text-sm transition-colors duration-200"
+                    className="text-white/60 hover:text-yellow-400 text-sm transition-colors duration-200"
                     whileHover={{ x: 4 }}
                   >
                     080 1234 4567
@@ -252,10 +209,10 @@ export default function Footer() {
                 </div>
 
                 <div>
-                  <p className="text-gray-500 text-xs mb-1 tracking-widest">US & OTHER COUNTRIES</p>
+                  <p className="text-white/50 text-xs mb-1 tracking-widest">US & OTHER COUNTRIES</p>
                   <motion.a 
                     href="tel:+18755422308" 
-                    className="text-gray-400 hover:text-yellow-400 text-sm transition-colors duration-200"
+                    className="text-white/60 hover:text-yellow-400 text-sm transition-colors duration-200"
                     whileHover={{ x: 4 }}
                   >
                     +1 875 542 2308
@@ -263,10 +220,10 @@ export default function Footer() {
                 </div>
 
                 <div>
-                  <p className="text-gray-500 text-xs mb-1 tracking-widest">ENTERPRISE</p>
+                  <p className="text-white/50 text-xs mb-1 tracking-widest">ENTERPRISE</p>
                   <motion.a 
                     href="mailto:business@hyntrixx.com" 
-                    className="text-gray-400 hover:text-yellow-400 text-sm transition-colors duration-200"
+                    className="text-white/60 hover:text-yellow-400 text-sm transition-colors duration-200"
                     whileHover={{ x: 4 }}
                   >
                     business@hyntrixx.com
@@ -274,7 +231,7 @@ export default function Footer() {
                 </div>
               </div>
 
-              {/* Social Media Icons - With golden glow effect */}
+              {/* Social Media Icons */}
               <div className="flex gap-3">
                 {socialLinks.map((social, i) => (
                   <motion.a
@@ -286,14 +243,13 @@ export default function Footer() {
                     whileInView="visible"
                     viewport={{ once: true }}
                     whileHover={{
-                      scale: 1.2,
-                      filter: 'drop-shadow(0 12px 24px rgba(250, 204, 21, 0.4))',
+                      y: -2,
                       backgroundColor: 'rgba(250, 204, 21, 0.1)',
                       color: '#FACC15',
                     }}
-                    whileTap={{ scale: 0.92 }}
-                    transition={spring.bounce}
-                    className="w-10 h-10 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center text-gray-400 transition-all duration-200"
+                    whileTap={{ scale: 0.96 }}
+                    transition={{ duration: timings.standard, ease: easing.gentle }}
+                    className="w-10 h-10 rounded-full bg-white/15 backdrop-blur-sm hover:bg-yellow-400/20 flex items-center justify-center text-white/70 hover:text-yellow-400 transition-all duration-200 border border-white/20 hover:border-yellow-400/50"
                     title={social.label}
                   >
                     <span className="text-lg font-semibold">{social.icon}</span>
@@ -305,10 +261,10 @@ export default function Footer() {
 
           {/* Divider */}
           <motion.div 
-            className="h-px bg-gray-800 mb-8"
+            className="h-px bg-white/10 mb-8"
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
-            transition={{ duration: 0.8, ease: easing.smoothOut, delay: 0.3 }}
+            transition={{ duration: timings.slow, ease: easing.smoothOut, delay: 0.3 }}
             viewport={{ once: true }}
             style={{ originX: 0 }}
           />
@@ -318,10 +274,10 @@ export default function Footer() {
             className="text-center"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: easing.smoothOut, delay: 0.5 }}
+            transition={{ duration: timings.standard, ease: easing.smoothOut, delay: 0.5 }}
             viewport={{ once: true }}
           >
-            <p className="text-gray-500 text-sm">
+            <p className="text-white/50 text-sm">
               © 2026 Hyntrixx. All Rights Reserved.
             </p>
           </motion.div>

@@ -1,240 +1,72 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { headlineReveal, subheadingReveal, spring, easing } from "../utils/animations";
+import { staggerContainerVariants, staggerItemVariants, timings } from "../utils/animations";
 import { ImagePlaceholder } from "../utils/imagePlaceholder";
 
 /**
- * KIDS PROGRAMS SECTION - Playful Premium Motion with Softer Easing
- *
- * Design Philosophy:
- * - Softer easing curves (easing.gentle) for warm, inviting feel
- * - Longer duration animations for playful but not cartoonish motion
- * - 3D tilt and light-follow like StudentPrograms but with lighter colors
- * - Sequential rating star animation with stagger
- * - Magnetic buttons with spring.bounce for fun interaction
- * - Premium polish without childishness
+ * KIDS PROGRAMS - Premium Glassmorphism Card Grid
+ * 
+ * Premium design:
+ * - Glass card surfaces with backdrop blur and soft borders
+ * - Yellow glow accents on hover with spring animation
+ * - Card lift + subtle scale + perspective transform on hover
+ * - Image zoom and overlay fade on hover
+ * - Responsive grid: 1 col mobile, 2 cols tablet, 4 cols desktop
+ * - Staggered reveal animation with spring physics
+ * - Yellow accent system (no other colors except black/white)
  */
 
 export default function KidsPrograms() {
   const courses = [
-    {
-      title: "Introduction to Coding",
-      rating: "4.9",
-      duration: "6 weeks",
-      description: "Learn coding basics with fun, interactive games."
-    },
-    {
-      title: "Creative Game Design",
-      rating: "4.8",
-      duration: "8 weeks",
-      description: "Design and build your own 2D games."
-    },
-    {
-      title: "Web Design for Kids",
-      rating: "4.7",
-      duration: "6 weeks",
-      description: "Create colorful websites with HTML and CSS."
-    },
-    {
-      title: "AI & Machine Learning 101",
-      rating: "4.9",
-      duration: "8 weeks",
-      description: "Explore AI concepts through hands-on projects."
-    }
+    { title: "Introduction to Coding", rating: "4.9", duration: "6 weeks", description: "Learn coding basics with fun, interactive games." },
+    { title: "Creative Game Design", rating: "4.8", duration: "8 weeks", description: "Design and build your own 2D games." },
+    { title: "Web Design for Kids", rating: "4.7", duration: "6 weeks", description: "Create colorful websites with HTML and CSS." },
+    { title: "AI & Machine Learning 101", rating: "4.9", duration: "8 weeks", description: "Explore AI concepts through hands-on projects." },
   ];
 
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-
-  // Handle 3D tilt on mouse move (lighter than StudentPrograms)
-  const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>, index: number) => {
-    if (hoveredIndex !== index) return;
-
-    const rect = e.currentTarget.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    const angleX = ((e.clientY - centerY) / (rect.height / 2)) * 10;
-    const angleY = ((e.clientX - centerX) / (rect.width / 2)) * 10;
-
-    setMousePos({ x: angleY, y: angleX });
-  };
-
   return (
-    <section className="w-full bg-white py-20 px-6">
-      <motion.div
-        className="max-w-6xl mx-auto"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: false, amount: 0.2 }}
-        variants={{
-          visible: {
-            transition: {
-              staggerChildren: 0.12,
-            },
-          },
-        }}
-      >
-        {/* Section Header */}
-        <motion.div className="text-center mb-12" variants={{
-          hidden: { opacity: 0, y: 30 },
-          visible: {
-            opacity: 1,
-            y: 0,
-            transition: { duration: 0.7, ease: easing.gentle },
-          },
-        }}>
-          <motion.h2 
-            className="text-5xl md:text-6xl font-bold text-black mb-4"
-            variants={headlineReveal}
-          >
-            Kids Learning Programs
-          </motion.h2>
-          <motion.p 
-            className="text-lg text-gray-700 mb-4"
-            variants={subheadingReveal}
-          >
-            Age-appropriate tech education for young learners.
-          </motion.p>
-          <motion.a 
-            href="#" 
-            className="text-yellow-400 font-semibold hover:underline"
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: {
-                opacity: 1,
-                y: 0,
-                transition: { duration: 0.6, ease: easing.gentle, delay: 0.2 },
-              },
-            }}
-            whileHover={{ x: 6 }}
-          >
-            Browse all kids courses →
-          </motion.a>
+    <section className="w-full bg-transparent py-20 px-6">
+      <motion.div className="max-w-6xl mx-auto" initial="hidden" whileInView="visible" viewport={{ once: false, amount: 0.2 }} variants={staggerContainerVariants}>
+        <div className="content-surface text-center">
+          <motion.div variants={staggerItemVariants}>
+            <h2 className="text-5xl md:text-6xl font-serif font-black mb-4">Kids Learning Programs</h2>
+            <p className="text-lg mb-6 max-w-2xl mx-auto leading-relaxed">Age-appropriate tech education for young learners.</p>
+            <motion.a href="#" className="inline-block text-yellow-400 font-semibold hover:text-white transition-colors" whileHover={{ x: 6 }}>
+              Browse all kids courses →
+            </motion.a>
+          </motion.div>
+        </div>
+
+        <motion.div className="mb-12 mx-auto max-w-3xl rounded-2xl overflow-hidden bg-white border border-gray-200 elevation-2 h-48 sm:h-56" variants={staggerItemVariants} style={{ boxShadow: '0 12px 36px rgba(0,0,0,0.08)' }}>
+          <iframe className="w-full h-full" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=placeholder" title="Kids Programs Overview" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen />
         </motion.div>
 
-        {/* YouTube Video Embed */}
-        <motion.div
-          className="mb-12 aspect-video rounded-lg overflow-hidden shadow-lg"
-          variants={{
-            hidden: { opacity: 0, scale: 0.95, filter: 'blur(10px)' },
-            visible: {
-              opacity: 1,
-              scale: 1,
-              filter: 'blur(0px)',
-              transition: { duration: 0.8, ease: easing.smoothOut },
-            },
-          }}
-        >
-          <iframe
-            width="100%"
-            height="100%"
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=placeholder"
-            title="Kids Programs Overview"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          ></iframe>
-        </motion.div>
-
-        {/* Course Cards */}
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-          variants={{
-            visible: {
-              transition: {
-                staggerChildren: 0.1,
-              },
-            },
-          }}
-        >
+        <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8" variants={{ visible: { transition: { staggerChildren: 0.12 } } }}>
           {courses.map((course, idx) => (
-            <motion.div
-              key={idx}
-              className="bg-white border border-black rounded-lg overflow-hidden cursor-pointer"
-              variants={{
-                hidden: { opacity: 0, y: 40, filter: 'blur(8px)' },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  filter: 'blur(0px)',
-                  transition: { duration: 0.7, ease: easing.gentle },
-                },
-              }}
-              onMouseMove={(e) => handleCardMouseMove(e, idx)}
-              onMouseEnter={() => setHoveredIndex(idx)}
-              onMouseLeave={() => {
-                setHoveredIndex(null);
-                setMousePos({ x: 0, y: 0 });
-              }}
-              style={{
-                rotateX: hoveredIndex === idx ? mousePos.y : 0,
-                rotateY: hoveredIndex === idx ? mousePos.x : 0,
-              }}
-              whileHover={{
-                scale: 1.06,
-                y: -8,
-                filter: 'drop-shadow(0 24px 48px rgba(0, 0, 0, 0.12))',
-              }}
-              transition={spring.soft}
-            >
-              {/* Placeholder Image Container */}
-              <div className="w-full">
-                <ImagePlaceholder
-                  alt={course.title}
-                  aspectRatio="4:3"
-                  containerClassName="rounded-none"
-                />
-              </div>
-
-              {/* Card Content */}
-              <div className="p-6">
-                {/* Course Header */}
-                <h3 className="text-xl font-bold text-black mb-2">{course.title}</h3>
-
-                {/* Rating - Sequential star animation */}
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-yellow-400 font-bold">{course.rating}</span>
-                  <div className="flex gap-0.5">
-                    {[...Array(5)].map((_, i) => (
-                      <motion.span 
-                        key={i} 
-                        className="text-yellow-400"
-                        initial={{ opacity: 0, scale: 0 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        transition={{ 
-                          duration: 0.4, 
-                          ease: easing.gentle,
-                          delay: i * 0.06,
-                        }}
-                        viewport={{ once: false }}
-                      >
-                        ★
-                      </motion.span>
-                    ))}
-                  </div>
+            <motion.div key={idx} variants={staggerItemVariants} className="relative">
+              <motion.article className="course-card relative rounded-2xl overflow-hidden cursor-pointer bg-white border border-gray-200 group card card-glow-playful elevation-2" whileHover={{ y: -8, scale: 1.03 }} transition={{ type: 'spring', stiffness: 380, damping: 34 }} style={{ boxShadow: '0 8px 20px rgba(0,0,0,0.06)' }}>
+                {/* Ambient playful glow (revealed on hover/focus) */}
+                <div aria-hidden className="card-glow card-glow-playful" />
+                <div className="w-full overflow-hidden relative">
+                  <motion.div whileHover={{ scale: 1.08 }} transition={{ duration: timings.standard }}>
+                    <ImagePlaceholder alt={course.title} aspectRatio="4:3" containerClassName="rounded-none w-full h-full object-cover" />
+                  </motion.div>
+                  <motion.div className="absolute inset-0 bg-gradient-to-b from-black/5 to-black/10" whileHover={{ opacity: 0 }} transition={{ duration: 0.25 }} style={{ pointerEvents: 'none' }} />
                 </div>
 
-                {/* Duration */}
-                <p className="text-sm text-gray-600 mb-3">{course.duration}</p>
+                <div className="p-6 lg:p-8">
+                  <h3 className="text-xl font-bold text-black mb-2">{course.title}</h3>
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="text-yellow-400 font-bold">{course.rating}</span>
+                    <div className="flex gap-0.5">{[...Array(5)].map((_, i) => (<span key={i} className="text-yellow-400">★</span>))}</div>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-3">{course.duration}</p>
+                  <p className="text-gray-600 mb-6">{course.description}</p>
 
-                {/* Description */}
-                <p className="text-gray-700 mb-6">{course.description}</p>
-
-                {/* Button - Magnetic with golden glow */}
-                <motion.button
-                  whileHover={{
-                    scale: 1.08,
-                    y: -3,
-                    filter: 'drop-shadow(0 16px 32px rgba(250, 204, 21, 0.3))',
-                  }}
-                  whileTap={{ scale: 0.96 }}
-                  transition={spring.bounce}
-                  className="w-full py-2 bg-yellow-400 text-black font-semibold hover:bg-yellow-300 transition-all duration-200 rounded"
-                >
-                  Explore Course
-                </motion.button>
-              </div>
+                  <motion.button whileHover={{ y: -2, boxShadow: '0 12px 40px rgba(255,212,0,0.25)' }} whileTap={{ scale: 0.98 }} transition={{ type: 'spring', stiffness: 480, damping: 36 }} className="w-full py-3 bg-black hover:bg-yellow-400 hover:text-black text-white font-bold rounded-xl transition-all duration-200" style={{ boxShadow: '0 4px 12px rgba(255,212,0,0.12)', willChange: 'transform, box-shadow' }}>
+                    Explore Course
+                  </motion.button>
+                </div>
+              </motion.article>
             </motion.div>
           ))}
         </motion.div>

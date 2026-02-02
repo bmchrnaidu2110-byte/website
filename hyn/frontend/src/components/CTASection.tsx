@@ -1,83 +1,80 @@
 import { motion } from "framer-motion";
-import { spring, easing, headlineReveal, subheadingReveal } from '../utils/animations';
+import { spring, easing, timings, magneticButton, headlineReveal, subheadingReveal } from '../utils/animations';
 
 /**
- * CTA SECTION - High-Emotion Call-to-Action
- * Premium micro-interactions:
- * - Animated background pulse/glow
- * - Staggered typography reveal
- * - Magnetic CTA button with subtle micro-shake on hover
- * - Glow halo that intensifies on interaction
+ * CTA SECTION - Premium Glassmorphism Call-to-Action
+ * 
+ * Premium design:
+ * - Full-screen black background with glass panels
+ * - Frosted glass content container with yellow glow
+ * - Staggered typography reveal with blur-in effect
+ * - Yellow button with glow shadow on hover
+ * - Smooth spring-based animations
+ * - Yellow / Black / White color system only
  */
 
 export default function CTASection() {
   return (
-    <section id="cta" className="w-full bg-yellow-400 py-20 px-6 relative overflow-hidden">
-      {/* Animated background pulse (subtle glow animation) */}
+    <section id="cta" className="w-full bg-black py-20 px-6 relative overflow-hidden">
+      {/* Animated gradient glow background */}
       <motion.div
-        className="absolute inset-0 opacity-30"
+        className="absolute inset-0 opacity-20"
         animate={{
           backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
         }}
         transition={{
-          duration: 8,
+          duration: 12,
           repeat: Infinity,
           ease: easing.gentle,
         }}
         style={{
-          background: 'linear-gradient(45deg, rgba(0,0,0,0.05), rgba(0,0,0,0.02), rgba(0,0,0,0.05))',
+          background: 'radial-gradient(circle at center, rgba(255,212,0,0.06), transparent 70%)',
           backgroundSize: '200% 200%',
         }}
       />
 
       <motion.div
-        className="max-w-4xl mx-auto text-center relative z-10"
+        className="max-w-4xl mx-auto text-center relative z-10 bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl px-8 py-16 md:px-12 md:py-20"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: false, amount: 0.5 }}
-        variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
+        variants={{ visible: { transition: { staggerChildren: 0.12 } } }}
+        style={{
+          boxShadow: '0 8px 32px rgba(255,212,0,0.08), inset 0 1px 1px rgba(255,255,255,0.2)',
+        }}
       >
         <motion.h2
-          className="text-5xl md:text-6xl font-bold text-black mb-6"
+          className="text-5xl md:text-6xl font-serif font-bold text-white mb-6"
           variants={headlineReveal}
         >
           Ready to Transform Your Future?
         </motion.h2>
 
         <motion.p
-          className="text-xl text-black mb-8 max-w-2xl mx-auto"
+          className="text-lg md:text-xl text-white/70 mb-10 max-w-2xl mx-auto leading-relaxed"
           variants={subheadingReveal}
         >
           Join thousands of students already learning with Hyntrixx. Start your journey today.
         </motion.p>
 
-        {/* Magnetic CTA with micro-shake on hover */}
+        {/* CTA Button - Yellow with glow on hover */}
         <motion.button
-          className="px-10 py-4 bg-black text-yellow-400 font-bold text-lg rounded-lg shadow-premium"
+          className="px-10 py-4 bg-yellow-400 text-black font-bold text-lg rounded-xl transition-all duration-200"
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: false, amount: 0.5 }}
-          transition={{ ...spring.bounce, delay: 0.4 }}
-          whileHover={{
-            scale: 1.08,
-            y: -4,
-            filter: 'drop-shadow(0 20px 40px rgba(250,204,21,0.4))',
+          transition={{ duration: timings.reveal, ease: easing.smoothOut, delay: 0.4 }}
+          variants={magneticButton}
+          whileHover="hover"
+          whileTap="tap"
+          style={{
+            boxShadow: '0 6px 20px rgba(255,212,0,0.2)',
           }}
-          whileTap={{ scale: 0.96 }}
           onHoverStart={(e) => {
-            // Trigger subtle micro-shake on hover
-            const element = e.currentTarget as HTMLButtonElement;
-            element.animate(
-              [
-                { transform: 'translateX(0)' },
-                { transform: 'translateX(-2px)' },
-                { transform: 'translateX(2px)' },
-                { transform: 'translateX(-1px)' },
-                { transform: 'translateX(1px)' },
-                { transform: 'translateX(0)' },
-              ],
-              { duration: 400, easing: 'cubic-bezier(0.22, 0.82, 0.54, 0.9)' }
-            );
+            (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(255,212,0,0.35)';
+          }}
+          onHoverEnd={(e) => {
+            (e.currentTarget as HTMLElement).style.boxShadow = '0 6px 20px rgba(255,212,0,0.2)';
           }}
         >
           Explore Programs
